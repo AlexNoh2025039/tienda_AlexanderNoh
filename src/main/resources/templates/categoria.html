@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Categoria</title>
+
+    <style>
+        :root {
+            --azul-principal: #64B5F6;
+            --azul-oscuro: #1E3A8A;
+            --durazno: #FFCCBC;
+            --gris: #E0E0E0;
+            --texto: #333333;
+            --blanco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, var(--azul-principal), var(--durazno));
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 30px 0;
+            color: var(--texto);
+        }
+
+        .contenedor {
+            width: 95%;
+            max-width: 1000px;
+            background: var(--blanco);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--azul-oscuro);
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid var(--gris);
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--azul-principal);
+            color: white;
+        }
+
+        .btn {
+            padding: 8px 12px;
+            border-radius: 8px;
+            background-color: var(--azul-principal);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        .acciones a {
+            margin: 0 3px;
+        }
+
+        form {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        input {
+            padding: 6px;
+            border-radius: 6px;
+            border: 1px solid var(--gris);
+        }
+
+        button {
+            padding: 7px 10px;
+            border: none;
+            border-radius: 6px;
+            background-color: var(--azul-principal);
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        .top-links {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .mensaje-error {
+            text-align: center;
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <h1>Lista de Categorías</h1>
+
+    <div style="text-align:center; margin-bottom:15px;">
+        <a th:href="@{/categoria/nuevo}" class="btn">Nueva Categoría</a>
+    </div>
+
+    <form action="/categoria/buscar" method="get">
+        <input type="number" name="idCategoria" placeholder="Buscar por ID">
+        <button type="submit">Buscar</button>
+        <a th:href="@{/categoria}" class="btn">Reiniciar</a>
+    </form>
+
+    <div class="top-links">
+        <a th:href="@{/home}" class="btn">Ir a Home</a>
+    </div>
+
+    <div th:if="${categoriaEncontrado != null}">
+        <h3 style="text-align:center;">Resultado</h3>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+            </tr>
+            <tr>
+                <td th:text="${categoriaEncontrado.idCategoria}"></td>
+                <td th:text="${categoriaEncontrado.nombreCategoria}"></td>
+                <td th:text="${categoriaEncontrado.descripcionCategoria}"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div th:if="${error != null}" class="mensaje-error">
+        <p th:text="${error}"></p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripcion</th>
+            <th>Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="categoria : ${categoria}">
+            <td th:text="${categoria.idCategoria}"></td>
+            <td th:text="${categoria.nombreCategoria}"></td>
+            <td th:text="${categoria.descripcionCategoria}"></td>
+            <td class="acciones">
+                <a th:href="@{/categoria/editar/{id}(id=${categoria.idCategoria})}" class="btn">Editar</a>
+                <a th:href="@{/categoria/eliminar/{id}(id=${categoria.idCategoria})}" class="btn"
+                   onclick="return confirm('¿Eliminar esta categoria?')">
+                    Eliminar
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${modoEdicion} ? 'Editar Categoria' : 'Nueva Categoria'"></title>
+
+    <style>
+        :root {
+            --azul-principal: #64B5F6;
+            --azul-oscuro: #1E3A8A;
+            --durazno: #FFCCBC;
+            --gris: #E0E0E0;
+            --texto: #333333;
+            --blanco: #ffffff;
+            --rojo: #d00000;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, var(--azul-principal), var(--durazno));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: var(--texto);
+        }
+
+        .container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            width: 500px;
+            background: var(--blanco);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--azul-oscuro);
+            margin-bottom: 20px;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: var(--azul-principal);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gris);
+            border-radius: 8px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: var(--azul-principal);
+        }
+
+        .error {
+            color: var(--rojo);
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .acciones {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-guardar {
+            background-color: var(--azul-principal);
+            color: white;
+        }
+
+        .btn-guardar:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        .btn-volver {
+            background-color: var(--durazno);
+            color: #333;
+        }
+
+        .btn-volver:hover {
+            background-color: #ffb199;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="card">
+
+        <h1 th:text="${modoEdicion} ? 'Editar Categoría' : 'Nueva Categoría'"></h1>
+
+        <form th:action="${modoEdicion} ? @{/categoria/actualizar/{id}(id=${categoria.idCategoria})} : @{/categoria/guardar}"
+              th:object="${categoria}"
+              method="post">
+
+            <input type="hidden" th:field="*{idCategoria}">
+
+            <div class="campo">
+                <label>Nombre Categoría</label>
+                <input type="text" th:field="*{nombreCategoria}">
+                <div class="error"
+                     th:if="${#fields.hasErrors('nombreCategoria')}"
+                     th:errors="*{nombreCategoria}"></div>
+            </div>
+
+            <div class="campo">
+                <label>Descripción</label>
+                <input type="text" th:field="*{descripcionCategoria}">
+                <div class="error"
+                     th:if="${#fields.hasErrors('descripcionCategoria')}"
+                     th:errors="*{descripcionCategoria}"></div>
+            </div>
+
+            <div class="acciones">
+                <button type="submit"
+                        class="btn btn-guardar"
+                        th:text="${modoEdicion} ? 'Actualizar' : 'Guardar'"></button>
+
+                <a th:href="@{/categoria}" class="btn btn-volver">Volver</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

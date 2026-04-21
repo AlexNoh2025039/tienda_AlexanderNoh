@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido</title>
+
+    <style>
+        :root {
+            --azul-principal: #64B5F6;
+            --azul-oscuro: #1E3A8A;
+            --durazno: #FFCCBC;
+            --gris: #E0E0E0;
+            --texto: #333333;
+            --blanco: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, var(--azul-principal), var(--durazno));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: var(--texto);
+        }
+
+        .contenedor {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .tarjeta {
+            background-color: var(--blanco);
+            padding: 35px;
+            border-radius: 15px;
+            width: 420px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .titulo {
+            font-size: 30px;
+            color: var(--azul-oscuro);
+            margin-bottom: 10px;
+        }
+
+        .subtitulo {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .usuario {
+            font-weight: bold;
+            color: var(--azul-principal);
+        }
+
+        .acciones {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .boton {
+            text-decoration: none;
+            background-color: var(--azul-principal);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .boton:hover {
+            background-color: var(--azul-oscuro);
+        }
+
+        .logout-btn {
+            background-color: var(--durazno);
+            color: #333;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background-color: #ffb199;
+        }
+
+        .separador {
+            margin: 15px 0;
+            height: 1px;
+            background-color: var(--gris);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+    <div class="tarjeta">
+
+        <h1 class="titulo">Bienvenido</h1>
+
+        <p class="subtitulo">
+            Hola, <span class="usuario" th:text="${username}"></span>
+        </p>
+
+        <p>Has iniciado sesión correctamente</p>
+
+        <div class="separador"></div>
+
+        <div class="acciones">
+            <a class="boton" th:href="@{/usuario}">Usuario 👤</a>
+            <a class="boton" th:href="@{/categoria}">Categoría 📁</a>
+            <a class="boton" th:href="@{/producto}">Producto 📦</a>
+            <a class="boton" th:href="@{/pedido}">Pedido 📃</a>
+            <a class="boton" th:href="@{/detallePedido}">Detalle Pedido 🧾</a>
+
+            <form th:action="@{/logout}" method="post">
+                <button type="submit" class="logout-btn">
+                    Cerrar Sesión
+                </button>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

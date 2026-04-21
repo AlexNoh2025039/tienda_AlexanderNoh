@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Usuarios</title>
+
+    <style>
+        :root {
+            --primario: #64B5F6;
+            --primario-oscuro: #1E3A8A;
+            --secundario: #FFCCBC;
+            --fondo: #EAF2FB;
+            --texto: #1f2937;
+            --blanco: #ffffff;
+            --error: #d00000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: var(--fondo);
+            color: var(--texto);
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primario-oscuro);
+            margin-bottom: 20px;
+        }
+
+        /* BOTONES */
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-nuevo {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        .btn-nuevo:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-editar {
+            background-color: var(--primario);
+            color: white;
+            padding: 6px 10px;
+        }
+
+        .btn-editar:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-eliminar {
+            background-color: var(--secundario);
+            color: #333;
+            padding: 6px 10px;
+        }
+
+        .btn-eliminar:hover {
+            background-color: #ffb199;
+        }
+
+        .btn-buscar {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        .btn-buscar:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-home {
+            background-color: transparent;
+            border: 2px solid var(--primario);
+            color: var(--primario-oscuro);
+        }
+
+        .btn-home:hover {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        /* FORMULARIO */
+        form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #cfe3f7;
+        }
+
+        /* TABLA */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--blanco);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            border: 1px solid #dbeafe;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        /* DARK MODE */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+
+            table {
+                background-color: #1e1e1e;
+            }
+
+            th {
+                background-color: var(--primario-oscuro);
+            }
+
+            td {
+                border: 1px solid #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h1 class="titulo">Lista de usuarios 👤</h1>
+
+<a th:href="@{/usuario/nuevo}" class="btn btn-nuevo">
+    Nuevo Usuario
+</a>
+
+<form action="/usuario/buscar" method="get">
+
+    <input type="number" name="idUsuario" placeholder="Buscar por ID">
+
+    <button type="submit" class="btn btn-buscar">
+        Buscar
+    </button>
+
+    <a th:href="@{/usuario}" class="btn btn-buscar">
+        Reiniciar
+    </a>
+
+    <a class="btn btn-home" th:href="@{/home}">
+        Ir a home
+    </a>
+
+</form>
+
+<div th:if="${usuarioEncontrado != null}">
+    <h3>Resultado de la búsqueda:</h3>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>APELLIDO</th>
+            <th>EDAD</th>
+        </tr>
+        <tr>
+            <td th:text="${usuarioEncontrado.idUsuario}"></td>
+            <td th:text="${usuarioEncontrado.nombreUsuario}"></td>
+            <td th:text="${usuarioEncontrado.apellidoUsuario}"></td>
+            <td th:text="${usuarioEncontrado.edadUsuario}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${error != null}">
+    <p th:text="${error}"></p>
+</div>
+
+<table>
+
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>NOMBRE</th>
+        <th>APELLIDO</th>
+        <th>EDAD</th>
+        <th>ACCIONES</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="usuario : ${usuario}">
+        <td th:text="${usuario.idUsuario}"></td>
+        <td th:text="${usuario.nombreUsuario}"></td>
+        <td th:text="${usuario.apellidoUsuario}"></td>
+        <td th:text="${usuario.edadUsuario}"></td>
+        <td>
+
+            <a th:href="@{/usuario/editar/{id}(id=${usuario.idUsuario})}"
+               class="btn btn-editar">
+                Editar
+            </a>
+
+            <a th:href="@{/usuario/eliminar/{id}(id=${usuario.idUsuario})}"
+               class="btn btn-eliminar"
+               onclick="return confirm('¿Desea eliminar este usuario?')">
+                Eliminar
+            </a>
+
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+
+</body>
+</html>

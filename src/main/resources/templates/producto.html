@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Producto</title>
+
+    <style>
+        :root {
+            --primario: #64B5F6;
+            --primario-oscuro: #1E3A8A;
+            --secundario: #FFCCBC;
+            --fondo: #EAF2FB;
+            --texto: #1f2937;
+            --blanco: #ffffff;
+            --error: #d00000;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: var(--fondo);
+            color: var(--texto);
+        }
+
+        .titulo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primario-oscuro);
+            margin-bottom: 20px;
+        }
+
+        /* BOTONES */
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn-nuevo {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        .btn-nuevo:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-editar {
+            background-color: var(--primario);
+            color: white;
+            padding: 6px 10px;
+        }
+
+        .btn-editar:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-eliminar {
+            background-color: var(--secundario);
+            color: #333;
+            padding: 6px 10px;
+        }
+
+        .btn-eliminar:hover {
+            background-color: #ffb199;
+        }
+
+        .btn-buscar {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        .btn-buscar:hover {
+            background-color: var(--primario-oscuro);
+        }
+
+        .btn-home {
+            background-color: transparent;
+            border: 2px solid var(--primario);
+            color: var(--primario-oscuro);
+        }
+
+        .btn-home:hover {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        /* FORMULARIO */
+        form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        input {
+            padding: 8px;
+            border: 1px solid #cfe3f7;
+            border-radius: 6px;
+        }
+
+        /* TABLA */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: var(--blanco);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #dbeafe;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: var(--primario);
+            color: white;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .mensaje-error {
+            color: var(--error);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* DARK MODE */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #121212;
+                color: #e0e0e0;
+            }
+
+            table {
+                background-color: #1e1e1e;
+            }
+
+            th {
+                background-color: var(--primario-oscuro);
+            }
+
+            td {
+                border: 1px solid #333;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<h1 class="titulo">Lista de Productos 📦</h1>
+
+ <a th:href="@{/producto/nuevo}" class="btn btn-nuevo">
+    Nuevo Producto
+</a>
+
+ <form action="/producto/buscar" method="get">
+
+    <input type="number" name="idProducto" placeholder="Buscar por ID">
+
+    <button type="submit" class="btn btn-buscar">
+        Buscar
+    </button>
+
+    <a th:href="@{/producto}" class="btn btn-buscar">
+        Reiniciar
+    </a>
+
+    <a class="btn btn-home" th:href="@{/home}">
+        Home
+    </a>
+
+</form>
+
+ <div th:if="${productoEncontrado != null}">
+    <h3 style="text-align:center;">Resultado</h3>
+
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>ID Categoría</th>
+        </tr>
+        <tr>
+            <td th:text="${productoEncontrado.idProducto}"></td>
+            <td th:text="${productoEncontrado.nombreProducto}"></td>
+            <td th:text="${productoEncontrado.precioProducto}"></td>
+            <td th:text="${productoEncontrado.stock}"></td>
+            <td th:text="${productoEncontrado.idCategoria}"></td>
+        </tr>
+    </table>
+</div>
+
+<div th:if="${error != null}" class="mensaje-error">
+    <p th:text="${error}"></p>
+</div>
+
+ <table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Stock</th>
+        <th>ID Categoría</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="producto : ${producto}">
+        <td th:text="${producto.idProducto}"></td>
+        <td th:text="${producto.nombreProducto}"></td>
+        <td th:text="${producto.precioProducto}"></td>
+        <td th:text="${producto.stock}"></td>
+        <td th:text="${producto.idCategoria}"></td>
+        <td>
+            <div class="acciones">
+
+                <a th:href="@{/producto/editar/{id}(id=${producto.idProducto})}"
+                   class="btn btn-editar">
+                    Editar
+                </a>
+
+                <a th:href="@{/producto/eliminar/{id}(id=${producto.idProducto})}"
+                   class="btn btn-eliminar"
+                   onclick="return confirm('¿Desea eliminar este producto?')">
+                    Eliminar
+                </a>
+
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
